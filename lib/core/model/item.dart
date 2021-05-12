@@ -2,13 +2,6 @@ class ItemModel {
   ItemModel(
       {this.name, this.id, this.body, this.image, this.price, this.soldBy});
 
-  String name;
-  int id;
-  String body;
-  String image;
-  String soldBy;
-  String price;
-
   ItemModel.fromJson(dynamic json) {
     id = json['id'] as int;
     name = json['name'] as String;
@@ -17,6 +10,13 @@ class ItemModel {
     soldBy = json['soldBy'] as String;
     price = json['price'] as String;
   }
+
+  String name;
+  int id;
+  String body;
+  String image;
+  String soldBy;
+  String price;
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};

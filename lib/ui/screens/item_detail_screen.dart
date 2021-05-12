@@ -10,6 +10,8 @@ import 'package:foxfund_alpha/ui/widgets/custom_text_widget.dart';
 import 'package:foxfund_alpha/ui/widgets/size_calculator.dart';
 import 'package:foxfund_alpha/utils/router.dart';
 
+import '../../main.dart';
+
 class ItemDetailScreen extends StatefulWidget {
   const ItemDetailScreen({Key key, @required this.item}) : super(key: key);
 
@@ -35,7 +37,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               InkWell(
-                onTap: () => moveTo(context, const BagScreen()),
+                onTap: () => moveTo(context, const BagScreen(fromCart: true)),
                 child: Container(
                     padding: EdgeInsets.symmetric(
                         vertical: screenAwareSize(5, context),
@@ -52,13 +54,17 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                           color: Styles.colorWhite,
                           size: screenAwareSize(22, context),
                         ),
-                        CustomText(
-                          AppCache.getSavedData().length.toString(),
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14,
-                          color: Styles.colorWhite,
-                          leftMargin: 8,
-                        )
+                        ValueListenableBuilder<List<dynamic>>(
+                            valueListenable: allCartItemsListener,
+                            builder: (_, List<dynamic> value, __) {
+                              return CustomText(
+                                value.length.toString(),
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                                color: Styles.colorWhite,
+                                leftMargin: 8,
+                              );
+                            })
                       ],
                     )),
               ),
@@ -286,7 +292,8 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
     };
     final bool isAdded = AppCache.saveJsonData(context, data: data);
     setState(() {});
-    if (isAdded)
+    if (isAdded) {
+      allCartItemsListener.value.add(data);
       showDialog<AlertDialog>(
         context: context,
         builder: (BuildContext context) => AlertDialog(
@@ -306,7 +313,10 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                   fontWeight: FontWeight.w600),
               CustomButton(
                   title: 'View Bag',
-                  onPressed: () => moveTo(context, const BagScreen()),
+                  onPressed: () {
+                    Navigator.pop(context);
+                    moveTo(context, const BagScreen(fromCart: true));
+                  },
                   height: 50,
                   buttonColor: Colors.cyan),
               verticalSpaceMedium,
@@ -321,5 +331,6 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
         ),
       );
+    }
   }
 }

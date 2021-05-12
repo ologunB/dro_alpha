@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foxfund_alpha/main.dart';
 import 'package:foxfund_alpha/ui/styles/styles.dart';
 import 'package:foxfund_alpha/ui/widgets/custom_text_widget.dart';
 import 'package:solid_bottom_sheet/solid_bottom_sheet.dart';
@@ -125,20 +126,38 @@ class _CustomSolidBottomSheetState extends State<CustomSolidBottomSheet> {
                             blurRadius: 5,
                             spreadRadius: 10),
                       ],
-                      borderRadius:   BorderRadius.only(
-                          topLeft: Radius.circular(screenAwareSize(30, context)),
-                          topRight: Radius.circular(screenAwareSize(30, context))),
-                       color: Styles.colorPurple,
+                      borderRadius: BorderRadius.only(
+                          topLeft:
+                              Radius.circular(screenAwareSize(30, context)),
+                          topRight:
+                              Radius.circular(screenAwareSize(30, context))),
+                      color: Styles.colorPurple,
                     ),
                     child: Padding(
-                      padding:   EdgeInsets.only(left: screenAwareSize(8, context), right: screenAwareSize(20, context), top: screenAwareSize(10, context), bottom: screenAwareSize(10, context)),
+                      padding: EdgeInsets.only(
+                          left: screenAwareSize(8, context),
+                          right: screenAwareSize(20, context),
+                          top: screenAwareSize(10, context),
+                          bottom: screenAwareSize(10, context)),
                       child: Row(
-                       // mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        // mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: <Widget>[
-                          Row(children:<Widget> [
-                            Icon(Icons.shopping_bag_outlined,color: Styles.colorWhite, size: screenAwareSize(24, context),) ,
-                              CustomText('Bag', fontWeight: FontWeight.bold,fontSize: 15,color: Styles.colorWhite,leftMargin: 8,)
-                          ],),
+                          Row(
+                            children: <Widget>[
+                              Icon(
+                                Icons.shopping_bag_outlined,
+                                color: Styles.colorWhite,
+                                size: screenAwareSize(24, context),
+                              ),
+                              CustomText(
+                                'Bag',
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15,
+                                color: Styles.colorWhite,
+                                leftMargin: 8,
+                              )
+                            ],
+                          ),
                           Expanded(
                             child: Image.asset(
                               snap.data
@@ -151,11 +170,18 @@ class _CustomSolidBottomSheetState extends State<CustomSolidBottomSheet> {
                           Container(
                               width: screenAwareSize(40, context),
                               height: screenAwareSize(40, context),
-                            decoration: BoxDecoration(
-                                color: Styles.colorWhite,
-                                borderRadius: BorderRadius.circular(30)),
-                            child: const Center(child:  CustomText('3', fontWeight: FontWeight.bold,fontSize: 15,))
-                          ),
+                              decoration: BoxDecoration(
+                                  color: Styles.colorWhite,
+                                  borderRadius: BorderRadius.circular(30)),
+                              child: Center(
+                                  child: ValueListenableBuilder<List<dynamic>>(
+                                      valueListenable: allCartItemsListener,
+                                      builder: (_, List<dynamic> value, __) =>
+                                          CustomText(
+                                            value.length.toString(),
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 15,
+                                          )))),
                         ],
                       ),
                     ),
@@ -183,7 +209,9 @@ class _CustomSolidBottomSheetState extends State<CustomSolidBottomSheet> {
                           onVerticalDragEnd:
                               widget.autoSwiped ? _onVerticalDragEnd : null,
                           onTap: widget.toggleVisibilityOnTap ? _onTap : null,
-                          child: widget.body,
+                          child: widget.controller.height == widget.maxHeight
+                              ? widget.body
+                              : Container(color: Styles.colorPurple),
                         ),
                       );
                     },

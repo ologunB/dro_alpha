@@ -25,4 +25,17 @@ class ItemsViewModel extends BaseModel {
       notifyListeners();
     }
   }
+
+  Future<void> searchItem(String text) async {
+    setBusy(true);
+    try {
+      allItems = await _itemsApi.searchAllItems(text);
+      setBusy(false);
+    } on AuthException catch (e) {
+      setBusy(false);
+      await dialog.showDialog(
+          title: 'Error!', description: e.message, buttonTitle: 'Close');
+      notifyListeners();
+    }
+  }
 }

@@ -42,126 +42,130 @@ class _MainLayoutScreenState extends State<MainLayoutScreen> {
             builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
               return BaseView<ItemsViewModel>(
                   onModelReady: (ItemsViewModel model) => model.getAllItems(),
-                  builder: (_, ItemsViewModel model, __) => model.busy
-                      ? const Center(child: CupertinoActivityIndicator())
-                      : model.allItems == null
-                          ? const ErrorOccurredWidget()
-                          : Stack(
+                  builder: (_, ItemsViewModel model, __) => Stack(
+                        children: <Widget>[
+                          SafeArea(
+                            child: Column(
                               children: <Widget>[
-                                SafeArea(
-                                  child: Column(
-                                    children: <Widget>[
-                                      CustomText(
-                                        '${model.allItems.length} Item(s)',
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                      SizedBox(
-                                          height: screenAwareSize(8, context)),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: <Widget>[
-                                          Container(
-                                            decoration: BoxDecoration(
-                                                color: Styles.colorGreyLight,
-                                                borderRadius:
-                                                    BorderRadius.circular(30)),
-                                            padding: EdgeInsets.all(
-                                                screenAwareSize(8, context)),
-                                            child: Icon(
-                                              Icons
-                                                  .subdirectory_arrow_right_sharp,
-                                              color: Styles.colorGrey,
-                                              size:
-                                                  screenAwareSize(20, context),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                              width:
-                                                  screenAwareSize(30, context)),
-                                          Container(
-                                            decoration: BoxDecoration(
-                                                color: Styles.colorGreyLight,
-                                                borderRadius:
-                                                    BorderRadius.circular(30)),
-                                            padding: EdgeInsets.all(
-                                                screenAwareSize(8, context)),
-                                            child: Icon(
-                                              Icons.filter_alt_outlined,
-                                              color: Styles.colorGrey,
-                                              size:
-                                                  screenAwareSize(20, context),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                              width:
-                                                  screenAwareSize(30, context)),
-                                          InkWell(
-                                            onTap: () {
-                                              setState(() {
-                                                toSearch = !toSearch;
-                                              });
-                                            },
-                                            child: Container(
-                                              decoration: BoxDecoration(
-                                                  color: toSearch
-                                                      ? Styles.colorPurple
-                                                      : Styles.colorGreyLight,
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          30)),
-                                              padding: EdgeInsets.all(
-                                                  screenAwareSize(8, context)),
-                                              child: Icon(
-                                                toSearch
-                                                    ? Icons.close
-                                                    : Icons.search_outlined,
-                                                color: toSearch
-                                                    ? Styles.colorWhite
-                                                    : Styles.colorGrey,
-                                                size: screenAwareSize(
-                                                    20, context),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      if (toSearch) searchBar(context),
-                                      Expanded(
-                                        child: Padding(
-                                          padding: EdgeInsets.all(
-                                              screenAwareSize(12, context)),
-                                          child: StaggeredGridView.count(
-                                              shrinkWrap: true,
-                                              crossAxisCount: 4,
-                                              children: model.allItems
-                                                  .map<Widget>(
-                                                      (ItemModel item) {
-                                                return homeItem(item);
-                                              }).toList(),
-                                              staggeredTiles: model.allItems
-                                                  .map<StaggeredTile>((_) =>
-                                                      const StaggeredTile.fit(
-                                                          2))
-                                                  .toList(),
-                                              mainAxisSpacing:
-                                                  screenAwareSize(12, context),
-                                              crossAxisSpacing:
-                                                  screenAwareSize(12, context)),
-                                        ),
-                                      )
-                                    ],
-                                  ),
+                                CustomText(
+                                  '${model.allItems?.length ?? 0} Item(s)',
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
                                 ),
-                                if (snapshot.data)
-                                  Container(
-                                    height: screenHeight(context),
-                                    width: screenWidth(context),
-                                    color: Colors.black45,
-                                  )
+                                SizedBox(height: screenAwareSize(8, context)),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Container(
+                                      decoration: BoxDecoration(
+                                          color: Styles.colorGreyLight,
+                                          borderRadius:
+                                              BorderRadius.circular(30)),
+                                      padding: EdgeInsets.all(
+                                          screenAwareSize(8, context)),
+                                      child: Icon(
+                                        Icons.subdirectory_arrow_right_sharp,
+                                        color: Styles.colorGrey,
+                                        size: screenAwareSize(20, context),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                        width: screenAwareSize(30, context)),
+                                    Container(
+                                      decoration: BoxDecoration(
+                                          color: Styles.colorGreyLight,
+                                          borderRadius:
+                                              BorderRadius.circular(30)),
+                                      padding: EdgeInsets.all(
+                                          screenAwareSize(8, context)),
+                                      child: Icon(
+                                        Icons.filter_alt_outlined,
+                                        color: Styles.colorGrey,
+                                        size: screenAwareSize(20, context),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                        width: screenAwareSize(30, context)),
+                                    InkWell(
+                                      onTap: () {
+                                        setState(() {
+                                          toSearch = !toSearch;
+                                          searchController.clear();
+                                          model.searchItem('');
+                                        });
+                                      },
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                            color: toSearch
+                                                ? Styles.colorPurple
+                                                : Styles.colorGreyLight,
+                                            borderRadius:
+                                                BorderRadius.circular(30)),
+                                        padding: EdgeInsets.all(
+                                            screenAwareSize(8, context)),
+                                        child: Icon(
+                                          toSearch
+                                              ? Icons.close
+                                              : Icons.search_outlined,
+                                          color: toSearch
+                                              ? Styles.colorWhite
+                                              : Styles.colorGrey,
+                                          size: screenAwareSize(20, context),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                if (toSearch) searchBar(context, model),
+                                Expanded(
+                                  child: Padding(
+                                    padding: EdgeInsets.all(
+                                        screenAwareSize(12, context)),
+                                    child: model.busy
+                                        ? const Center(
+                                            child: CupertinoActivityIndicator())
+                                        : model.allItems == null
+                                            ? const ErrorOccurredWidget()
+                                            : model.allItems.isEmpty
+                                                ? const Center(
+                                                    child: CustomText(
+                                                      'List is Empty',
+                                                      fontSize: 16,
+                                                    ),
+                                                  )
+                                                : StaggeredGridView.count(
+                                                    shrinkWrap: true,
+                                                    crossAxisCount: 4,
+                                                    children: model.allItems
+                                                        .map<Widget>(
+                                                            (ItemModel item) {
+                                                      return homeItem(item);
+                                                    }).toList(),
+                                                    staggeredTiles: model
+                                                        .allItems
+                                                        .map<StaggeredTile>((_) =>
+                                                            const StaggeredTile
+                                                                .fit(2))
+                                                        .toList(),
+                                                    mainAxisSpacing:
+                                                        screenAwareSize(
+                                                            12, context),
+                                                    crossAxisSpacing:
+                                                        screenAwareSize(
+                                                            12, context)),
+                                  ),
+                                )
                               ],
-                            ));
+                            ),
+                          ),
+                          if (snapshot.data)
+                            Container(
+                              height: screenHeight(context),
+                              width: screenWidth(context),
+                              color: Colors.black45,
+                            )
+                        ],
+                      ));
             }),
       ),
       bottomSheet: CustomSolidBottomSheet(
@@ -182,7 +186,7 @@ class _MainLayoutScreenState extends State<MainLayoutScreen> {
   TextEditingController searchController = TextEditingController();
   bool toSearch = false;
 
-  Widget searchBar(BuildContext context) {
+  Widget searchBar(BuildContext context, ItemsViewModel model) {
     return Padding(
       padding: EdgeInsets.all(screenAwareSize(8, context)),
       child: TextFormField(
@@ -194,18 +198,29 @@ class _MainLayoutScreenState extends State<MainLayoutScreen> {
           fontWeight: FontWeight.w600,
           fontSize: screenAwareSize(14, context, width: true),
         ),
-        onChanged: (String a) {},
+        onChanged: (String a) {
+          model.searchItem(a);
+        },
         decoration: InputDecoration(
           prefixIcon: Icon(
             Icons.search,
             color: Styles.colorGrey,
             size: screenAwareSize(22, context),
           ),
-          suffixIcon: Icon(
-            Icons.close,
-            color: Styles.colorGrey,
-            size: screenAwareSize(22, context),
-          ),
+          suffixIcon: searchController.text.isNotEmpty
+              ? InkWell(
+                  onTap: () {
+                    searchController.clear();
+                    model.searchItem('');
+                    setState(() {});
+                  },
+                  child: Icon(
+                    Icons.close,
+                    color: Styles.colorGrey,
+                    size: screenAwareSize(22, context),
+                  ),
+                )
+              : null,
           contentPadding: EdgeInsets.symmetric(
               horizontal: screenAwareSize(14, context),
               vertical: screenAwareSize(8, context)),

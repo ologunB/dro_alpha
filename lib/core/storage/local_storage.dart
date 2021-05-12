@@ -5,7 +5,7 @@ import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 const String kUserBoxName = 'userBox';
-const String kSavedBox = 'saved1';
+const String kSavedBox = 'saved01';
 
 class AppCache {
   static Future<void> init() async {
@@ -15,7 +15,7 @@ class AppCache {
 
   static Box<List<dynamic>> get _box => Hive.box<List<dynamic>>(kUserBoxName);
 
-  void nothing() {}
+  String a = '';
 
   static bool saveJsonData(BuildContext context,
       {@required Map<String, dynamic> data}) {
@@ -35,6 +35,22 @@ class AppCache {
     list.add(data);
     _box.put(kSavedBox, list);
     return true;
+  }
+
+  static void removeOne(int id) {
+    if (id == null) {
+      return;
+    }
+
+    final List<dynamic> list = getSavedData();
+    for (int index = 0; index < list.length; index++) {
+      final ItemModel i = ItemModel.fromJson(list[index]['product']);
+      if (i.id == id) {
+        list.removeAt(index);
+      }
+    }
+
+    _box.put(kSavedBox, list);
   }
 
   static void clear() {

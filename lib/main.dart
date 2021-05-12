@@ -7,7 +7,6 @@ import 'package:foxfund_alpha/utils/navigator.dart';
 import 'package:foxfund_alpha/utils/router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-
 import 'core/storage/local_storage.dart';
 import 'locator.dart';
 
@@ -18,6 +17,8 @@ Future<void> main() async {
   runApp(const MyApp());
 }
 
+ValueNotifier<List<dynamic>> allCartItemsListener;
+
 class MyApp extends StatelessWidget {
   const MyApp({Key key}) : super(key: key);
 
@@ -25,6 +26,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
         const SystemUiOverlayStyle(statusBarColor: Colors.white));
+    allCartItemsListener = ValueNotifier<List<dynamic>>(AppCache.getSavedData());
     return MultiProvider(
         providers: allProviders,
         child: MaterialApp(
