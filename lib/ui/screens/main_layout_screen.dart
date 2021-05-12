@@ -154,7 +154,8 @@ class _MainLayoutScreenState extends State<MainLayoutScreen> {
                                                         screenAwareSize(
                                                             12, context)),
                                   ),
-                                )
+                                ),
+                                SizedBox(height: screenAwareSize(50, context))
                               ],
                             ),
                           ),
@@ -170,8 +171,10 @@ class _MainLayoutScreenState extends State<MainLayoutScreen> {
       ),
       bottomSheet: CustomSolidBottomSheet(
           elevation: 2,
+          smoothness: Smoothness.high,
+          toggleVisibilityOnTap: true,
           draggableBody: true,
-          maxHeight: screenHeight(context) / 1.1,
+          maxHeight: screenHeight(context) / 1.15,
           controller: solidController,
           //  changeBar: solidController.isOpened,
           headerBar: Container(

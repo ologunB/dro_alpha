@@ -54,11 +54,11 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                           color: Styles.colorWhite,
                           size: screenAwareSize(22, context),
                         ),
-                        ValueListenableBuilder<List<dynamic>>(
-                            valueListenable: allCartItemsListener,
-                            builder: (_, List<dynamic> value, __) {
+                        ValueListenableBuilder<int>(
+                            valueListenable: cartCount,
+                            builder: (_, int value, __) {
                               return CustomText(
-                                value.length.toString(),
+                                value.toString(),
                                 fontWeight: FontWeight.bold,
                                 fontSize: 14,
                                 color: Styles.colorWhite,
@@ -238,7 +238,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
               child: CustomButton(
                 title: 'Add to bag',
                 hasIcon: true,
-                height: screenAwareSize(45, context),
+                height: screenAwareSize(50, context),
                 buttonColor: Styles.colorPurpleLight,
                 onPressed: () {
                   doneDialog(context);
@@ -293,7 +293,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
     final bool isAdded = AppCache.saveJsonData(context, data: data);
     setState(() {});
     if (isAdded) {
-      allCartItemsListener.value.add(data);
+      cartCount.value++;
       showDialog<AlertDialog>(
         context: context,
         builder: (BuildContext context) => AlertDialog(

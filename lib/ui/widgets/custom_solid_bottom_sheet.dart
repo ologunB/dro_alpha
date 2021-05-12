@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:foxfund_alpha/main.dart';
 import 'package:foxfund_alpha/ui/styles/styles.dart';
 import 'package:foxfund_alpha/ui/widgets/custom_text_widget.dart';
+import 'package:foxfund_alpha/utils/util.dart';
 import 'package:solid_bottom_sheet/solid_bottom_sheet.dart';
 
 import 'size_calculator.dart';
@@ -65,6 +66,7 @@ class _CustomSolidBottomSheetState extends State<CustomSolidBottomSheet> {
   bool isDragDirectionUp = false;
 
   void _onVerticalDragUpdate(DragUpdateDetails data) {
+    Util.offKeyboard(context);
     _setNativeSmoothness();
     if (((widget.controller.height - data.delta.dy) > widget.minHeight) &&
         ((widget.controller.height - data.delta.dy) < widget.maxHeight)) {
@@ -74,6 +76,7 @@ class _CustomSolidBottomSheetState extends State<CustomSolidBottomSheet> {
   }
 
   void _onVerticalDragEnd(DragEndDetails data) {
+    Util.offKeyboard(context);
     _setUsersSmoothness();
 
     if (isDragDirectionUp && widget.controller.value)
@@ -107,6 +110,7 @@ class _CustomSolidBottomSheetState extends State<CustomSolidBottomSheet> {
         stream: widget.controller.isOpenStream,
         initialData: false,
         builder: (BuildContext context, AsyncSnapshot<bool> snap) {
+
           return Container(
             color: snap.data ? Colors.black45 : const Color(0xffD7EBF3),
             child: Column(
@@ -174,11 +178,11 @@ class _CustomSolidBottomSheetState extends State<CustomSolidBottomSheet> {
                                   color: Styles.colorWhite,
                                   borderRadius: BorderRadius.circular(30)),
                               child: Center(
-                                  child: ValueListenableBuilder<List<dynamic>>(
-                                      valueListenable: allCartItemsListener,
-                                      builder: (_, List<dynamic> value, __) =>
+                                  child: ValueListenableBuilder<int>(
+                                      valueListenable: cartCount,
+                                      builder: (_, int value, __) =>
                                           CustomText(
-                                            value.length.toString(),
+                                            value.toString(),
                                             fontWeight: FontWeight.bold,
                                             fontSize: 15,
                                           )))),

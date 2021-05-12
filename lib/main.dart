@@ -17,7 +17,7 @@ Future<void> main() async {
   runApp(const MyApp());
 }
 
-ValueNotifier<List<dynamic>> allCartItemsListener;
+ValueNotifier<int> cartCount;
 
 class MyApp extends StatelessWidget {
   const MyApp({Key key}) : super(key: key);
@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
         const SystemUiOverlayStyle(statusBarColor: Colors.white));
-    allCartItemsListener = ValueNotifier<List<dynamic>>(AppCache.getSavedData());
+    cartCount = ValueNotifier<int>(AppCache.getSavedData().length);
     return MultiProvider(
         providers: allProviders,
         child: MaterialApp(
