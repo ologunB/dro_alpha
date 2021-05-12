@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:foxfund_alpha/ui/screens/main_layout_screen.dart';
 import 'package:foxfund_alpha/ui/screens/splash_screen.dart';
 
-import 'constants/routes.dart';
+import 'routes.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {

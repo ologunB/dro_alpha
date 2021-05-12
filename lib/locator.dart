@@ -17,7 +17,6 @@ void setupLocator() {
 
   locator.registerLazySingleton(() => ItemsApi());
   locator.registerFactory(() => ItemsViewModel());
-
 }
 
 final List<SingleChildWidget> allProviders = <SingleChildWidget>[

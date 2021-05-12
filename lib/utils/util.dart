@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 
-abstract class Util {
+abstract class Utils {
   static void offKeyboard(BuildContext context) {
     final FocusScopeNode currentFocus = FocusScope.of(context);
 

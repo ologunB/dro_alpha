@@ -66,7 +66,7 @@ class _CustomSolidBottomSheetState extends State<CustomSolidBottomSheet> {
   bool isDragDirectionUp = false;
 
   void _onVerticalDragUpdate(DragUpdateDetails data) {
-    Util.offKeyboard(context);
+    Utils.offKeyboard(context);
     _setNativeSmoothness();
     if (((widget.controller.height - data.delta.dy) > widget.minHeight) &&
         ((widget.controller.height - data.delta.dy) < widget.maxHeight)) {
@@ -76,7 +76,7 @@ class _CustomSolidBottomSheetState extends State<CustomSolidBottomSheet> {
   }
 
   void _onVerticalDragEnd(DragEndDetails data) {
-    Util.offKeyboard(context);
+    Utils.offKeyboard(context);
     _setUsersSmoothness();
 
     if (isDragDirectionUp && widget.controller.value)
@@ -88,6 +88,7 @@ class _CustomSolidBottomSheetState extends State<CustomSolidBottomSheet> {
   }
 
   void _onTap() {
+    Utils.offKeyboard(context);
     final bool isOpened = widget.controller.height == widget.maxHeight;
     widget.controller.value = !isOpened;
   }

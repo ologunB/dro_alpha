@@ -1,12 +1,8 @@
 import 'dart:async';
 
 import 'package:foxfund_alpha/core/model/item.dart';
-import 'package:foxfund_alpha/utils/auth_exception.dart';
-import 'package:foxfund_alpha/utils/error_util.dart';
 
-import 'base_api.dart';
-
-class ItemsApi extends BaseAPI {
+class ItemsApi {
   //get All Items
   Future<List<ItemModel>> getAllItems() async {
     try {
@@ -15,7 +11,7 @@ class ItemsApi extends BaseAPI {
       // since there's no api to get from, we fetch from a list locally stored
       return allItems;
     } catch (e) {
-      throw AuthException(DioErrorUtil.handleError(e));
+      throw 'Error';
     }
   }
 
@@ -29,11 +25,11 @@ class ItemsApi extends BaseAPI {
         }
       }
       // simulate loading/network delay
-       await Future<void>.delayed(const Duration(milliseconds: 500));
+      await Future<void>.delayed(const Duration(milliseconds: 500));
       // since there's no api to get from, we fetch from a list locally stored
       return list;
     } catch (e) {
-      throw AuthException(DioErrorUtil.handleError(e));
+      throw 'Error';
     }
   }
 }

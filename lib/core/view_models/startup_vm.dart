@@ -1,4 +1,4 @@
-import 'package:foxfund_alpha/utils/constants/routes.dart';
+import 'package:foxfund_alpha/utils/routes.dart';
 
 import 'base_vm.dart';
 

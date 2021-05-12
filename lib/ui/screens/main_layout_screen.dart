@@ -33,7 +33,7 @@ class _MainLayoutScreenState extends State<MainLayoutScreen> {
       backgroundColor: Styles.colorWhite,
       body: GestureDetector(
         onTap: () {
-          Util.offKeyboard(context);
+          Utils.offKeyboard(context);
           solidController.hide();
         },
         child: StreamBuilder<bool>(
