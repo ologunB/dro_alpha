@@ -1,17 +1,56 @@
+import 'package:flutter/cupertino.dart';
+import 'package:foxfund_alpha/core/model/item.dart';
+import 'package:foxfund_alpha/ui/widgets/snackbar.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 const String kUserBoxName = 'userBox';
-const String kUserProfileKey = 'profile';
+const String kSavedBox = 'saved1';
 
-class AppStorage {
+class AppCache {
   static Future<void> init() async {
     await Hive.initFlutter();
-    await Hive.openBox<Map<String, dynamic>>(kUserBoxName);
+    await Hive.openBox<List<dynamic>>(kUserBoxName);
   }
 
- // static Box<Map<String, dynamic>> get _box => Hive.box<Map<String, dynamic>>(kUserBoxName);
-
+  static Box<List<dynamic>> get _box => Hive.box<List<dynamic>>(kUserBoxName);
 
   void nothing() {}
+
+  static bool saveJsonData(BuildContext context,
+      {@required Map<String, dynamic> data}) {
+    if (data == null) {
+      return false;
+    }
+
+    final List<dynamic> list = getSavedData();
+    for (final dynamic item in list) {
+      final ItemModel i = ItemModel.fromJson(item['product']);
+      if (i.id == data['product']['id']) {
+        showSnackBar(context, 'Error', 'Item Already Exist in the bag');
+        return false;
+      }
+    }
+
+    list.add(data);
+    _box.put(kSavedBox, list);
+    return true;
+  }
+
+  static void clear() {
+    _box.clear();
+  }
+
+  static void clean(String key) {
+    _box.delete(key);
+  }
+
+  static List<dynamic> getSavedData() {
+    final List<dynamic> data = _box.get(kSavedBox, defaultValue: <dynamic>[]);
+    if (data == null) {
+      return <Map<String, dynamic>>[];
+    }
+    final List<dynamic> list = List<dynamic>.from(data);
+    return list;
+  }
 }

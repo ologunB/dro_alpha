@@ -13,7 +13,7 @@ import 'locator.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await AppStorage.init(); //Initialize Hive for Flutter
+  await AppCache.init(); //Initialize Hive for Flutter
   setupLocator();
   runApp(const MyApp());
 }

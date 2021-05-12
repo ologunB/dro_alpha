@@ -1,22 +1,31 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:foxfund_alpha/core/model/item.dart';
+import 'package:foxfund_alpha/core/storage/local_storage.dart';
+import 'package:foxfund_alpha/ui/screens/bag_screen.dart';
 import 'package:foxfund_alpha/ui/styles/spacing.dart';
 import 'package:foxfund_alpha/ui/styles/styles.dart';
 import 'package:foxfund_alpha/ui/widgets/custom_button.dart';
 import 'package:foxfund_alpha/ui/widgets/custom_text_widget.dart';
 import 'package:foxfund_alpha/ui/widgets/size_calculator.dart';
+import 'package:foxfund_alpha/utils/router.dart';
 
 class ItemDetailScreen extends StatefulWidget {
-  const ItemDetailScreen({Key key}) : super(key: key);
+  const ItemDetailScreen({Key key, @required this.item}) : super(key: key);
+
+  final ItemModel item;
 
   @override
   _ItemDetailScreenState createState() => _ItemDetailScreenState();
 }
 
 class _ItemDetailScreenState extends State<ItemDetailScreen> {
+  ItemModel item;
+  int numberOf = 1;
+
   @override
   Widget build(BuildContext context) {
+    item = widget.item;
     return Scaffold(
       backgroundColor: Styles.colorWhite,
       appBar: AppBar(
@@ -25,31 +34,34 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Container(
-                  padding: EdgeInsets.symmetric(
-                      vertical: screenAwareSize(5, context),
-                      horizontal: screenAwareSize(8, context)),
-                  decoration: BoxDecoration(
-                      borderRadius:
-                          BorderRadius.circular(screenAwareSize(8, context)),
-                      color: Styles.colorPurpleLight),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Icon(
-                        Icons.shopping_bag_outlined,
-                        color: Styles.colorWhite,
-                        size: screenAwareSize(22, context),
-                      ),
-                      CustomText(
-                        '3',
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
-                        color: Styles.colorWhite,
-                        leftMargin: 8,
-                      )
-                    ],
-                  )),
+              InkWell(
+                onTap: () => moveTo(context, const BagScreen()),
+                child: Container(
+                    padding: EdgeInsets.symmetric(
+                        vertical: screenAwareSize(5, context),
+                        horizontal: screenAwareSize(8, context)),
+                    decoration: BoxDecoration(
+                        borderRadius:
+                            BorderRadius.circular(screenAwareSize(8, context)),
+                        color: Styles.colorPurpleLight),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Icon(
+                          Icons.shopping_bag_outlined,
+                          color: Styles.colorWhite,
+                          size: screenAwareSize(22, context),
+                        ),
+                        CustomText(
+                          AppCache.getSavedData().length.toString(),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                          color: Styles.colorWhite,
+                          leftMargin: 8,
+                        )
+                      ],
+                    )),
+              ),
             ],
           ),
           horizontalSpaceSmall
@@ -59,26 +71,19 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
         padding: EdgeInsets.all(screenAwareSize(20, context)),
         child: ListView(
           children: <Widget>[
-            CachedNetworkImage(
-                imageUrl: 'dd',
-                fit: BoxFit.fitWidth,
-                placeholder: (BuildContext context, String url) =>
-                    const CircularProgressIndicator(),
-                errorWidget:
-                    (BuildContext context, String url, dynamic error) =>
-                        Image.asset(
-                          'images/placeholder.png',
-                          height: screenAwareSize(200, context),
-                          //  fit: BoxFit.fitWidth,
-                        )),
+            Image.asset(
+              item.image,
+              height: screenAwareSize(200, context),
+              //  fit: BoxFit.fitWidth,
+            ),
             SizedBox(height: screenAwareSize(15, context)),
-            const CustomText(
-              'Garlic Oil',
+            CustomText(
+              item.name,
               fontSize: 16,
               fontWeight: FontWeight.bold,
             ),
-            const CustomText(
-              'Soft Gel - 650mg',
+            CustomText(
+              item.body,
               fontSize: 14,
               fontWeight: FontWeight.bold,
             ),
@@ -107,7 +112,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                       fontWeight: FontWeight.bold,
                     ),
                     CustomText(
-                      'Emzor Pharmaceuticals',
+                      item.soldBy,
                       fontSize: 13,
                       fontWeight: FontWeight.bold,
                       color: Styles.colorPurple,
@@ -135,23 +140,39 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
-                          Icon(
-                            Icons.remove,
-                            size: screenAwareSize(20, context),
-                            color: Styles.colorBlack,
+                          InkWell(
+                            onTap: () {
+                              if (numberOf < 10 && numberOf > 1) {
+                                numberOf--;
+                              }
+                              setState(() {});
+                            },
+                            child: Icon(
+                              Icons.remove,
+                              size: screenAwareSize(20, context),
+                              color: Styles.colorBlack,
+                            ),
                           ),
                           CustomText(
-                            '1',
+                            numberOf.toString(),
                             leftMargin: 10,
                             rightMargin: 10,
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                             color: Styles.colorBlack,
                           ),
-                          Icon(
-                            Icons.add,
-                            size: screenAwareSize(20, context),
-                            color: Styles.colorBlack,
+                          InkWell(
+                            onTap: () {
+                              if (numberOf < 9 && numberOf > 0) {
+                                numberOf++;
+                              }
+                              setState(() {});
+                            },
+                            child: Icon(
+                              Icons.add,
+                              size: screenAwareSize(20, context),
+                              color: Styles.colorBlack,
+                            ),
                           ),
                         ],
                       ),
@@ -166,7 +187,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                   ],
                 ),
                 CustomText(
-                  '₦350',
+                  '₦${item.price}',
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                   color: Styles.colorBlack,
@@ -259,40 +280,46 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
   }
 
   void doneDialog(BuildContext context) {
-    showDialog<AlertDialog>(
-      context: context,
-      builder: (BuildContext context) => AlertDialog(
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            CustomText('Successful',
-                fontSize: 16,
-                bottomMargin: 10,
-                color: Styles.colorBlack,
-                fontWeight: FontWeight.bold),
-            CustomText('Garlic Oil has been added to your bag',
-                fontSize: 16,
-                centerText: true,
-                color: Styles.colorBlack,
-                bottomMargin: 10,
-                fontWeight: FontWeight.w600),
-            CustomButton(
-                title: 'View Bag',
-                onPressed: () {},
-                height: 50,
-                buttonColor: Colors.cyan),
-            verticalSpaceMedium,
-            CustomButton(
-                title: 'Done',
-                onPressed: () {},
-                height: 50,
-                buttonColor: Colors.cyan),
-          ],
+    final Map<String, dynamic> data = <String, dynamic>{
+      'product': widget.item.toJson(),
+      'count': numberOf
+    };
+    final bool isAdded = AppCache.saveJsonData(context, data: data);
+    setState(() {});
+    if (isAdded)
+      showDialog<AlertDialog>(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              CustomText('Successful',
+                  fontSize: 16,
+                  bottomMargin: 10,
+                  color: Styles.colorBlack,
+                  fontWeight: FontWeight.bold),
+              CustomText('${widget.item.name} has been added to your bag',
+                  fontSize: 16,
+                  centerText: true,
+                  color: Styles.colorBlack,
+                  bottomMargin: 10,
+                  fontWeight: FontWeight.w600),
+              CustomButton(
+                  title: 'View Bag',
+                  onPressed: () => moveTo(context, const BagScreen()),
+                  height: 50,
+                  buttonColor: Colors.cyan),
+              verticalSpaceMedium,
+              CustomButton(
+                  title: 'Done',
+                  onPressed: () => Navigator.pop(context),
+                  height: 50,
+                  buttonColor: Colors.cyan),
+            ],
+          ),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
         ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15),
-        ),
-      ),
-    );
+      );
   }
 }
