@@ -9,7 +9,7 @@ void showSnackBar(BuildContext context, String title, String msg, {int duration 
     flushbarStyle: FlushbarStyle.FLOATING,
     flushbarPosition: FlushbarPosition.TOP,
     duration: Duration(seconds: duration),
-    borderRadius: BorderRadius.circular(8),
+    borderRadius: 8,
     backgroundColor: title == 'Error' ? Colors.red : Colors.blue,
   ).show(context);
 }

@@ -250,6 +250,7 @@ class _MainLayoutScreenState extends State<MainLayoutScreen> {
   Widget homeItem(ItemModel item) {
     return GestureDetector(
       onTap: () {
+        Utils.offKeyboard(context);
         moveTo(context, ItemDetailScreen(item: item));
       },
       child: Container(
