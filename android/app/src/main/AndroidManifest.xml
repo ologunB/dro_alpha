@@ -1,6 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.ologunb.dro_alpha">
-   <application
+    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <application
         android:label="dro_alpha"
         android:icon="@mipmap/ic_launcher">
         <activity
